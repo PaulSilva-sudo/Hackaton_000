@@ -14,8 +14,93 @@
     </form>
 
     <div id="fonts_name"></div>
+    <div id="fonts_match"></div>
 
     <script>
+      const fontList = [
+        "Abel",
+        "Alegreya",
+        "Alegreya Sans",
+        "Anton",
+        "Archivo Narrow",
+        "Arial",
+        "Arimo",
+        "Arvo",
+        "Asap",
+        "Bangers",
+        "Bitter",
+        "Bree Serif",
+        "Cabin",
+        "Candal",
+        "Comic Sans",
+        "Courier New",
+        "Crimson Text",
+        "Cuprum",
+        "Dancing Script",
+        "Dosis",
+        "Droid Sans",
+        "Droid Serif",
+        "Exo 2",
+        "Fira Sans",
+        "Fjalla One",
+        "Francois One",
+        "Georgia",
+        "Hind",
+        "Impact",
+        "Inconsolata",
+        "Indie Flower",
+        "Josefin Sans",
+        "Karla",
+        "Lato",
+        "Libre Baskerville",
+        "Lobster",
+        "Lora",
+        "Lucida Sans",
+        "Maven Pro",
+        "Merriweather",
+        "Merriweather Sans",
+        "Montserrat",
+        "Muli",
+        "Noto Sans",
+        "Noto Serif",
+        "Nunito",
+        "Open Sans",
+        "Open Sans Condensed",
+        "Oswald",
+        "Oxygen",
+        "PT Sans",
+        "PT Sans Narrow",
+        "PT Serif",
+        "Pacifico",
+        "Palatino",
+        "Passion One",
+        "Play",
+        "Playfair Display",
+        "Poiret One",
+        "Poppins",
+        "Quicksand",
+        "Raleway",
+        "Righteous",
+        "Roboto",
+        "Roboto Condensed",
+        "Roboto Slab",
+        "Rokkitt",
+        "Shadows Into Light",
+        "Sigmar One",
+        "Signika",
+        "Slabo 27px",
+        "Source Sans Pro",
+        "Tahoma",
+        "Times New Roman",
+        "Titillium Web",
+        "Trebuchet MS",
+        "Ubuntu",
+        "Ubuntu Condensed",
+        "Varela Round",
+        "Verdana",
+        "Vollkorn",
+        "Yanone Kaffeesatz",
+      ];
       async function fetchFontFamily(url) {
         try {
           const response = await fetch(
@@ -45,9 +130,32 @@
         .addEventListener("submit", async function (event) {
           event.preventDefault();
           var url = document.getElementById("exampleInput").value;
-          var fontFamily = await fetchFontFamily(url);
+          var fontFamilyString = await fetchFontFamily(url);
+          var fontFamilies = fontFamilyString.replace(/['"]+/g, "").split(", "); // Remove quotes and split by comma
+
+          // Variable to collect matching fonts
+          let matches = [];
+
+          // Check each fontFamily against the fontList
+          fontFamilies.forEach((fontFamily) => {
+            if (fontList.includes(fontFamily.trim())) {
+              matches.push(fontFamily);
+            }
+          });
+
+          // Update the DOM based on whether matches were found
+          if (matches.length > 0) {
+            console.log("Matches found:", matches.join(", "));
+            document.getElementById("fonts_match").textContent =
+              "Font match: " + matches.join(", ");
+          } else {
+            console.log("Match NOT FOUND");
+            document.getElementById("fonts_match").textContent =
+              "Font match: NOT FOUND";
+          }
+
           document.getElementById("fonts_name").textContent =
-            "Font family: " + fontFamily;
+            "Font family: " + fontFamilyString;
         });
     </script>
   </body>
