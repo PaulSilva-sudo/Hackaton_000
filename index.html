@@ -1,12 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Hackaton</title>
-</head>
-<body>
-    
-</body>
+  </head>
+  <body>
+    <form id="myForm">
+      <label for="exampleInput">URL:</label>
+      <input type="text" id="exampleInput" name="exampleInput" />
+      <input type="submit" value="Get Fonts" />
+    </form>
+
+    <div id="fonts_name"></div>
+
+    <script>
+      async function fetchFontFamily(url) {
+        try {
+          const response = await fetch(
+            "http://127.0.0.1:5000/get-font-family",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ url: url }),
+            }
+          );
+
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+
+          const data = await response.json();
+          return data.fontFamily;
+        } catch (error) {
+          console.error("Fetch error:", error);
+        }
+      }
+
+      document
+        .getElementById("myForm")
+        .addEventListener("submit", async function (event) {
+          event.preventDefault();
+          var url = document.getElementById("exampleInput").value;
+          var fontFamily = await fetchFontFamily(url);
+          document.getElementById("fonts_name").textContent =
+            "Font family: " + fontFamily;
+        });
+    </script>
+  </body>
 </html>
